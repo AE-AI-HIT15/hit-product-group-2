@@ -1,0 +1,25 @@
+[project]
+name = "projects"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "accelerate>=1.9.0",
+    "bitsandbytes>=0.46.1",
+    "comet-ml>=3.50.0",
+    "cut-cross-entropy>=25.1.1",
+    "datasets>=3.6.0",
+    "hf-transfer>=0.1.9",
+    "huggingface-hub>=0.34.1",
+    "peft>=0.16.0",
+    "protobuf>=6.31.1",
+    "sentencepiece>=0.2.0",
+    "torch>=2.7.1",
+    "transformers>=4.54.0",
+    "triton>=3.3.1",
+    "trl>=0.19.1",
+    "unsloth>=2025.7.8",
+    "unsloth-zoo>=2025.7.10",
+    "xformers>=0.0.31.post1",
+]
