@@ -5,7 +5,7 @@ from typing import Optional
 
 @dataclass
 class ModelConfig:
-    base_model: str = "1TuanPham/T-VisStar-7B-v0.1"
+    base_model: str = "Qwen/Qwen2.5-7B-Instruct-1M"
     max_seq_length: int = 4096
     dtype: Optional[str] = None
     load_in_4bit: bool = True
@@ -58,8 +58,7 @@ class APIConfig:
     hf_token: str = ""
     comet_api_key: str = ""
     comet_project_name: str = "second-brain-course"
-    # model_name: str = "Chatbot_VietNamese_Law"
-    model_name: str = "1TuanPham/T-VisStar-7B-v0.1"
+    model_name: str = "Chatbot_VietNamese_Law"
 
     def __post_init__(self):
         self.hf_token = os.getenv("HF_TOKEN", self.hf_token)
@@ -124,10 +123,10 @@ def setup_environment(config: Config) -> None:
 
 ALPACA_PROMPT = """Dưới đây là hướng dẫn mô tả một nhiệm vụ, kết hợp với thông tin đầu vào cung cấp thêm ngữ cảnh. Hãy viết phản hồi hoàn thành yêu cầu một cách phù hợp.
 
-### Instruction:
+### Hướng dẫn:
 Bạn là một trợ lý thông minh, hãy trả lời câu hỏi hiện tại của user dựa trên lịch sử chat và các tài liệu liên quan. Câu trả lời phải ngắn gọn, chính xác nhưng vẫn đảm bảo đầy đủ các ý chính.
-### Input:
+### Câu hỏi:
 {}
 
-### Response:
+### Trả lời:
 {}"""
