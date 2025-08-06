@@ -79,7 +79,7 @@ class ChatbotInference:
         else:
             return output
     
-    def chat(self, instruction: str) -> str:
+    def chat(self, instruction: str, streaming = False) -> str:
         """Simple chat interface.
         
         Args:
@@ -88,7 +88,7 @@ class ChatbotInference:
         Returns:
             Chatbot response
         """
-        return self.generate_response(instruction, streaming=False, trim_input_message=True)
+        return self.generate_response(instruction, streaming=streaming, trim_input_message=True)
 
 
 def create_inference_engine(

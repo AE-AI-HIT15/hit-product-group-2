@@ -6,7 +6,7 @@ from huggingface_hub import HfApi
 from ..config.settings import ModelConfig, APIConfig
 
 
-def load_base_model(config: ModelConfig) -> Tuple[PreTrainedModel, PreTrainedTokenizer]:
+def load_model(model_name: str, config: ModelConfig) -> Tuple[PreTrainedModel, PreTrainedTokenizer]:
     """Load the base language model and tokenizer.
     
     Args:
@@ -16,7 +16,7 @@ def load_base_model(config: ModelConfig) -> Tuple[PreTrainedModel, PreTrainedTok
         Tuple of (model, tokenizer)
     """
     model, tokenizer = FastLanguageModel.from_pretrained(
-        model_name=config.base_model,
+        model_name=model_name,
         max_seq_length=config.max_seq_length,
         dtype=config.dtype,
         load_in_4bit=config.load_in_4bit,
@@ -61,7 +61,7 @@ def prepare_model_for_training(config: ModelConfig) -> Tuple[PreTrainedModel, Pr
         Tuple of (configured_model, tokenizer)
     """
     # Load base model
-    model, tokenizer = load_base_model(config)
+    model, tokenizer = load_model(config.base_model, config)
     
     # Configure PEFT
     model = configure_peft_model(model, config)

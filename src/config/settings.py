@@ -50,7 +50,7 @@ class TrainingConfig:
 class InferenceConfig:
     max_new_tokens: int = 256
     use_cache: bool = True
-    streaming: bool = True
+    streaming: bool = False
 
 
 @dataclass
@@ -130,3 +130,4 @@ Bạn là một trợ lý thông minh, hãy trả lời câu hỏi hiện tại 
 
 ### Trả lời:
 {}"""
+MODEL_NAME = "AIPROENGINEER/Chatbot_VietNamese_Law"
