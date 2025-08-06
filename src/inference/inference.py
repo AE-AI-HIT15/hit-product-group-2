@@ -139,6 +139,7 @@ def generate_single_response(
     model: PreTrainedModel,
     tokenizer: PreTrainedTokenizer,
     instruction: str,
+    streaming = False,
     config: InferenceConfig
 ) -> str:
     """Generate a single response without creating an inference engine.
@@ -153,4 +154,4 @@ def generate_single_response(
         Generated response
     """
     inference_engine = create_inference_engine(model, tokenizer, config)
-    return inference_engine.chat(instruction)
+    return inference_engine.chat(instruction, streaming)

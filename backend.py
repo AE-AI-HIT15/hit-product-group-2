@@ -49,12 +49,14 @@ async def chat_completion(request: ChatRequest):
         user_id = request.user_id or str(uuid4())
         message = request.user_message
         if request.stream:
+            streaming = True
             return StreamingResponse(
-                generate_single_response(model_inference, tokenizer, message, config.inference),
+                generate_single_response(model_inference, tokenizer, message, streaming,config.inference),
                 media_type="text/plain"
             )
         else:
-            response_content = generate_single_response(model_inference, tokenizer, message, config.inference)
+            streaming = False
+            response_content = generate_single_response(model_inference, tokenizer, message, streaming, config.inference)
             return ChatResponse(
                 content=response_content,
                 user_id=user_id,
