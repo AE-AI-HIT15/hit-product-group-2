@@ -41,7 +41,12 @@ hit-product-group-2/
 
 1. Install dependencies:
 ```bash
-bash run_all.sh
+bash scripts/setup_env.sh || exit 1
+
+bash scripts/setup_monitor.sh || exit 1
+
+bash scripts/setupgit.sh || exit 1
+
 ```
 
 2. Set environment variables (optional):
