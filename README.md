@@ -5,7 +5,13 @@ A modular application for fine-tuning and deploying a Vietnamese law chatbot usi
 ## Project Structure
 
 ```
-finetune/
+hit-product-group-2/
+├── notebooks/
+│   ├── fine_tunning.ipynb/     # Run in Kaggle if you don't have GPU
+├── scripts/            # Setup env for script
+│   ├── setup_env.sh
+│   ├── setup_monitor.sh
+│   ├── setupgit.sh
 ├── src/
 │   ├── config/
 │   │   ├── __init__.py
@@ -26,15 +32,16 @@ finetune/
 │       ├── __init__.py
 │       └── gpu_utils.py         # GPU utilities
 ├── main.py                      # Main application entry point
-├── requirements.txt             # Dependencies
-└── README.md                   # This file
+├── backend.py                   # Backend with fastapi
+├── chat_interface.py            # Interface with streamlit
+└── README.md                   # This file descripts about this project
 ```
 
 ## Setup
 
 1. Install dependencies:
 ```bash
-pip install -r requirements.txt
+bash run_all.sh
 ```
 
 2. Set environment variables (optional):
@@ -48,13 +55,15 @@ export COMET_PROJECT_NAME="your_project_name"
 
 ### Training
 
-Train the model:
+Train the model if you have GPUs
 ```bash
 python main.py train
 ```
+Train the model with notebooks if you don't have GPUS 
+
 
 This will:
-- Load the base model (T-VisStar-7B-v0.1)
+- Load the base model (Qwen/Qwen2.5-7B-Instruct-1M)
 - Configure LoRA parameters
 - Load and process the Vietnamese law dataset
 - Train the model
@@ -78,7 +87,18 @@ Use a specific model path:
 python main.py inference --model-path /path/to/model
 ```
 
-## Configuration
+Run Inference with Interface
+```bash
+source .venv/bin/activate
+python backend.py
+
+```
+```bash
+source .venv/bin/activate
+streamlit run chat_interface.py
+
+```
+
 
 The application uses dataclasses for configuration management:
 
@@ -100,7 +120,7 @@ Configuration can be customized by modifying `src/config/settings.py` or setting
 
 ## Model Details
 
-- **Base Model**: T-VisStar-7B-v0.1
+- **Base Model**: Qwen/Qwen2.5-7B-Instruct-1M
 - **Fine-tuning Method**: LoRA (Low-Rank Adaptation)
 - **Dataset**: Vietnamese law Q&A dataset
 - **Prompt Format**: Alpaca-style prompts in Vietnamese
@@ -108,5 +128,4 @@ Configuration can be customized by modifying `src/config/settings.py` or setting
 ## Requirements
 
 - NVIDIA GPU with CUDA support
-- Python 3.8+
-- See `requirements.txt` for package dependencies
+- Python 3.11+
