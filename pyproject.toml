@@ -13,6 +13,7 @@ dependencies = [
     "fastapi>=0.116.1",
     "hf-transfer>=0.1.9",
     "huggingface-hub>=0.34.1",
+    "logging>=0.4.9.6",
     "peft>=0.16.0",
     "protobuf>=6.31.1",
     "requests>=2.32.4",
