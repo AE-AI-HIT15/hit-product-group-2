@@ -139,7 +139,7 @@ def generate_single_response(
     model: PreTrainedModel,
     tokenizer: PreTrainedTokenizer,
     instruction: str,
-    streaming = False,
+    streaming: bool,
     config: InferenceConfig
 ) -> str:
     """Generate a single response without creating an inference engine.
