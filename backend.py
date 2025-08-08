@@ -7,7 +7,7 @@ import logging
 import json
 import time
 
-from src.config.settings import get_config, MODEL_NAME
+from src.config.settings import get_config, MODEL_NAME , conversation_chains, count_chat
 from src.model.model_loader import load_llm_pipeline 
 from src.inference.inference import generate_single_response
 logging.basicConfig(level=logging.INFO)
@@ -49,18 +49,18 @@ async def chat_completion(request: ChatRequest):
         if not request.user_message.strip():
             raise HTTPException(status_code=400, detail="Empty message")
             
-        # Tạo user_id nếu chưa có
+
         user_id = request.user_id or str(uuid4())
-        #inference 
+        
         response_content = generate_single_response(
             llm ,
             request.user_message,
-            request.user_id
+            user_id , 
         )
         
         return ChatResponse(
             content=response_content,
-            user_id=request.user_id,
+            user_id= user_id,
             bot_id=request.bot_id
         )
             
@@ -77,6 +77,15 @@ async def health_check():
         "model": MODEL_NAME,
         "model_loaded": True
     }
+    
+@app.post("/api/memory/reset", status_code=204)
+def reset_memory( user_id : str ):
+    if not req.user_id:
+        raise HTTPException(status_code=400, detail="Missing user_id")
+    
+    conversation_chains.pop(user_id, None)
+    count_chat.pop(user_id, None)
+    return Response(status_code=204)
 
 if __name__ == "__main__":
     import uvicorn

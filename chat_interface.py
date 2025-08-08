@@ -40,6 +40,16 @@ def response_generator(user_message, user_id, bot_id):
     for word in content.split():
         yield word + " "
         time.sleep(0.03)
+        
+def reset_server_memory(user_id):
+    try:
+        r = requests.post(f"{API_BASE_URL}/api/memory/reset",
+                          json={"user_id": user_id}, timeout=5)
+        r.raise_for_status()
+        return True
+    except Exception as e:
+        logger.error(f"Reset memory error: {e}")
+        return False
 
 # --- UI ---
 st.set_page_config(page_title="Vietnamese Law Chatbot", page_icon="⚖️", layout="wide")
@@ -55,8 +65,14 @@ with st.sidebar:
         st.info(f"Model: {health.get('model', '')}")
     else:
         st.error("❌ Server không hoạt động")
+
     enable_streaming = st.checkbox("Bật hiệu ứng streaming", value=False)
+
     if st.button("🗑️ Xóa lịch sử trò chuyện"):
+        
+        reset_server_memory(st.session_state.user_id) 
+        st.session_state.user_id = str(uuid4())
+        
         st.session_state.messages = []
         st.rerun()
 
