@@ -11,13 +11,20 @@ from src.config.settings import get_config, configure_gpu_settings, setup_enviro
 from src.utils.gpu_utils import ensure_gpu_available, print_gpu_stats
 from src.model.model_loader import (
     prepare_model_for_training, 
-    prepare_model_for_inference,
     save_model_locally,
     push_model_to_hub
 )
 from src.data.dataset import prepare_training_data
 from src.training.trainer import train_model
-from src.inference.inference import create_inference_engine, run_interactive_chat
+from src.inference.inference import  ChatbotInference , run_interactive_chat
+#add
+from unsloth import FastLanguageModel
+from transformers import pipeline
+from langchain_community.llms import HuggingFacePipeline ###
+from langchain.chains import ConversationChain
+from langchain.memory import ConversationBufferMemory
+from langchain.schema import AIMessage
+from langchain.schema import HumanMessage 
 
 
 def train_chatbot():
@@ -103,7 +110,7 @@ def run_inference(model_path: str = None):
         # For local model, we need to load it differently
         if Path(model_name).exists():
             # Load from local path
-            from unsloth import FastLanguageModel
+    
             model, tokenizer = FastLanguageModel.from_pretrained(
                 model_name=model_name,
                 max_seq_length=config.model.max_seq_length,
@@ -115,10 +122,21 @@ def run_inference(model_path: str = None):
             model, tokenizer = prepare_model_for_training(config.model)
         
         # Prepare for inference
-        model = prepare_model_for_inference(model)
+        model = FastLanguageModel.for_inference(model)
+        
+        pipe = pipeline(
+            "text-generation",
+            model=model,
+            tokenizer=tokenizer,
+            max_new_tokens= 512 ,   #MAX_NEW_TOKENS
+            temperature= 0.7 ,      #TEMPERATURE
+            top_k= 50 ,             #TOP_K
+            top_p= 0.9              #TOP_P
+        )
+        llm = HuggingFacePipeline(pipeline=pipe)
         
         # Create inference engine
-        inference_engine = create_inference_engine(model, tokenizer, config.inference)
+        inference_engine = ChatbotInference( llm )
         
         # Run interactive chat
         run_interactive_chat(inference_engine)

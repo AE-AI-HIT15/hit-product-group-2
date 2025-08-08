@@ -27,4 +27,7 @@ dependencies = [
     "unsloth-zoo>=2025.7.10",
     "uvicorn>=0.35.0",
     "xformers>=0.0.31.post1",
+    "transformers==4.55.0",
+    "langchain==0.3.27",
+    "langchain-huggingface>=0.3.1",
 ]

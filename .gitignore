@@ -10,3 +10,8 @@ wheels/
 .venv
 .env
 unsloth_compiled_cache/
+
+=2024.3
+.python-version
+.env.template
+README.md

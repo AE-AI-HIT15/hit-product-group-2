@@ -1,7 +1,11 @@
 import os
 from dataclasses import dataclass
 from typing import Optional
-
+#add
+from langchain.chains import ConversationChain
+from langchain.memory import ConversationBufferMemory
+from langchain.schema import AIMessage
+from langchain.schema import HumanMessage 
 
 @dataclass
 class ModelConfig:
@@ -119,15 +123,8 @@ def setup_environment(config: Config) -> None:
     if config.api.enable_comet:
         os.environ["COMET_API_KEY"] = config.api.comet_api_key
         os.environ["COMET_PROJECT_NAME"] = config.api.comet_project_name
+        
+count_chat = {}
+conversation_chains = {} 
 
-
-ALPACA_PROMPT = """Dưới đây là hướng dẫn mô tả một nhiệm vụ, kết hợp với thông tin đầu vào cung cấp thêm ngữ cảnh. Hãy viết phản hồi hoàn thành yêu cầu một cách phù hợp.
-
-### Hướng dẫn:
-Bạn là một trợ lý thông minh, hãy trả lời câu hỏi hiện tại của user dựa trên lịch sử chat và các tài liệu liên quan. Câu trả lời phải ngắn gọn, chính xác nhưng vẫn đảm bảo đầy đủ các ý chính.
-### Câu hỏi:
-{}
-
-### Trả lời:
-{}"""
 MODEL_NAME = "AIPROENGINEER/Chatbot_VietNamese_Law"

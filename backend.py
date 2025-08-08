@@ -8,10 +8,12 @@ import json
 import time
 
 from src.config.settings import get_config, MODEL_NAME
-from src.model.model_loader import load_model, prepare_model_for_inference
+from src.model.model_loader import load_llm_pipeline 
 from src.inference.inference import generate_single_response
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
+
+from src.utils.streaming import generate_streaming_response
 
 app = FastAPI(title="Vietnamese Law Chatbot API", version="1.0.0")
 
@@ -24,8 +26,8 @@ app.add_middleware(
 )
 config = get_config()
 # Load model on startup
-model, tokenizer = load_model(MODEL_NAME, config.model)
-model_inference = prepare_model_for_inference(model)
+llm = load_llm_pipeline(MODEL_NAME, config.model)
+#model_inference = load_model(MODEL_NAME, config.model)
 
 
 class ChatRequest(BaseModel):
@@ -41,32 +43,32 @@ class ChatResponse(BaseModel):
 
 @app.post("/api/chat", response_model=ChatResponse)
 async def chat_completion(request: ChatRequest):
+    """Main chat endpoint with conversation memory"""
     try:
-        logger.info(f"Received chat request from user: {request.user_id}")
+        logger.info(f"Received chat request from user: {request.user_id}")    
         if not request.user_message.strip():
             raise HTTPException(status_code=400, detail="Empty message")
+            
         # Tạo user_id nếu chưa có
         user_id = request.user_id or str(uuid4())
-        message = request.user_message
-        if request.stream:
-            streaming = True
-            return StreamingResponse(
-                generate_single_response(model_inference, tokenizer, message, streaming,config.inference),
-                media_type="text/plain"
-            )
-        else:
-            streaming = False
-            response_content = generate_single_response(model_inference, tokenizer, message, streaming, config.inference)
-            return ChatResponse(
-                content=response_content,
-                user_id=user_id,
-                bot_id=request.bot_id
-            )
-    except HTTPException:
-        raise
+        #inference 
+        response_content = generate_single_response(
+            llm ,
+            request.user_message,
+            request.user_id
+        )
+        
+        return ChatResponse(
+            content=response_content,
+            user_id=request.user_id,
+            bot_id=request.bot_id
+        )
+            
     except Exception as e:
+        print(e)
         logger.error(f"Unexpected error: {e}")
         raise HTTPException(status_code=500, detail="Internal server error")
+    
 
 @app.get("/api/health")
 async def health_check():

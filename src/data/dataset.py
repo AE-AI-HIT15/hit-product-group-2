@@ -2,7 +2,15 @@ from datasets import load_dataset, Dataset
 from typing import Dict, List, Any
 from transformers import PreTrainedTokenizer
 
-from ..config.settings import ALPACA_PROMPT
+ALPACA_PROMPT = """Dưới đây là hướng dẫn mô tả một nhiệm vụ, kết hợp với thông tin đầu vào cung cấp thêm ngữ cảnh. Hãy viết phản hồi hoàn thành yêu cầu một cách phù hợp.
+
+### Hướng dẫn:
+Bạn là một trợ lý thông minh, hãy trả lời câu hỏi hiện tại của user dựa trên lịch sử chat và các tài liệu liên quan. Câu trả lời phải ngắn gọn, chính xác nhưng vẫn đảm bảo đầy đủ các ý chính.
+### Câu hỏi:
+{}
+
+### Trả lời:
+{}"""
 
 
 def formatting_prompts_func(examples: Dict[str, List[Any]], tokenizer: PreTrainedTokenizer) -> Dict[str, List[str]]:
