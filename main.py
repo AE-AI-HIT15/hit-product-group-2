@@ -20,7 +20,7 @@ from src.inference.inference import  ChatbotInference , run_interactive_chat
 #add
 from unsloth import FastLanguageModel
 from transformers import pipeline
-from langchain_community.llms import HuggingFacePipeline ###
+from langchain_huggingface import HuggingFacePipeline
 from langchain.chains import ConversationChain
 from langchain.memory import ConversationBufferMemory
 from langchain.schema import AIMessage
