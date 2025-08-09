@@ -80,7 +80,7 @@ async def health_check():
     
 @app.post("/api/memory/reset", status_code=204)
 def reset_memory( user_id : str ):
-    if not req.user_id:
+    if not user_id:
         raise HTTPException(status_code=400, detail="Missing user_id")
     
     conversation_chains.pop(user_id, None)
