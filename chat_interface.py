@@ -66,7 +66,6 @@ with st.sidebar:
     else:
         st.error("❌ Server không hoạt động")
 
-    enable_streaming = st.checkbox("Bật hiệu ứng streaming", value=False)
 
     if st.button("🗑️ Xóa lịch sử trò chuyện"):
         
@@ -96,13 +95,11 @@ if prompt := st.chat_input("Nhập câu hỏi pháp luật của bạn..."):
     with st.chat_message("user"):
         st.markdown(prompt)
     with st.chat_message("assistant"):
-        if enable_streaming:
-            response = st.write_stream(response_generator(prompt, st.session_state.user_id, bot_id))
-        else:
-            with st.spinner("Đang xử lý..."):
-                resp = send_chat_request(prompt, st.session_state.user_id, bot_id)
-                response = resp.get("content", "Không có phản hồi từ bot.")
-            st.markdown(response)
+
+        with st.spinner("Đang xử lý..."):
+            resp = send_chat_request(prompt, st.session_state.user_id, bot_id)
+            response = resp.get("content", "Không có phản hồi từ bot.")
+        st.markdown(response)
     st.session_state.messages.append({"role": "assistant", "content": response})
 
 # Footer
